@@ -1,0 +1,30 @@
+{
+    "expo": {
+        "name": "Group03_WIP",
+        "slug": "Group03_WIP",
+        "version": "1.0.0",
+        "orientation": "portrait",
+        "icon": "./assets/icon.png",
+        "userInterfaceStyle": "light",
+        "newArchEnabled": true,
+        "splash": {
+            "image": "./assets/splash-icon.png",
+            "resizeMode": "contain",
+            "backgroundColor": "#ffffff"
+        },
+        "ios": {
+            "bundleIdentifier": "com.tashipaljor.group03"
+        },
+        "android": {
+            "package": "com.tashipaljor.group03"
+        },
+        "web": {
+            "favicon": "./assets/favicon.png"
+        },
+        "extra": {
+            "eas": {
+                "projectId": "8e3bff26-dd04-4751-8b13-ee2976cdcbdc"
+            }
+        }
+    }
+}
