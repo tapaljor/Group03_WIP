@@ -5,53 +5,35 @@ import { FirebaseDB } from '../config/firebaseConfig';
 import { userAuthentication } from '../config/userAuthentication';
 import { styles } from '../g03CSS';
 import { Item } from '../models/ItemDoc';
-import { collection, onSnapshot } from 'firebase/firestore';
-import { FontAwesome6 } from '@expo/vector-icons';
+import { collection, onSnapshot, query, where } from 'firebase/firestore';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../types';
+import { ymd } from '../utils/ymd';
 
 const collectionName = "itemList"
 type Nav = NativeStackNavigationProp<RootStackParamList>
 
-const TransactionHomeScreen= () => {
+const TransactionHomeScreen = () => {
     const navigation = useNavigation<Nav>()
     const { user } = userAuthentication();
     const [itemList, setItemList] = useState<Item[]>([])
 
     useEffect(() => {
-        const collectionRef = collection(FirebaseDB, collectionName)
-        const unsubscribe = onSnapshot(collectionRef, (snapshot) => {
-            setItemList((prevList) => {
-                let updatedList = [...prevList]
-
-                snapshot.docChanges().forEach((change) => {
-                    const data = {
-                        ...change.doc.data(),
-                        id: change.doc.id
-                    }
-                    if (change.type === "added") {
-                        if (!updatedList.some((v) => v.id === data.id)) {
-                            updatedList.push(data)
-                        } // to avoid duplicat push
-                    } else if (change.type === "modified") {
-                        updatedList = updatedList.map((v) =>
-                            v.id === data.id ? data : v
-                        ) // to make sure data is there in array
-                    } else if (change.type === "removed") {
-                        updatedList = updatedList.filter((v) =>
-                            v.id !== data.id)
-                        // update exluding deleted
-                    }
-                })
-                return updatedList
-            })
-        })
+        const colRef = collection(FirebaseDB, collectionName)
+        const q = query(colRef, where("buyerID", "==", user?.uid))
+        const unsubscribe = onSnapshot(q, (snap) => {
+            const rows = snap.docs.map((d) => ({
+                id: d.id, ...(d.data() as any)
+            })) as Item[]
+            setItemList(rows)
+        },
+            (err) => console.error("Canot fetch list", err)
+        )
         return () => unsubscribe()
     }, [])
     const getDetail = (item: Item) => {
         navigation.navigate("ItemDetailScreen", { itemDetail: item })
     }
-
     const ListItem = ({ item }: { item: Item }) => (
         <TouchableOpacity
             style={{ borderRadius: 10 }}
@@ -59,11 +41,12 @@ const TransactionHomeScreen= () => {
         >
             <View style={styles.mainView}>
                 <View style={styles.subView}>
-                    <Text style={{ fontWeight: "bold" }}>{item.brand} / {item.type}</Text>
+                    <Text style={{ fontWeight: "bold" }} numberOfLines={1}>{item.title}</Text>
                     <Text>${item.price}</Text>
                 </View>
                 <View style={styles.subView}>
-                    <Text>{item.condition.toLocaleUpperCase()}</Text>
+                    <Text numberOfLines={1}>{item.brand} / {item.type} </Text>
+                    <Text style={{fontStyle: "italic"}}>{ymd(item.soldDate)}</Text>
                 </View>
             </View>
         </TouchableOpacity>
@@ -80,7 +63,6 @@ const TransactionHomeScreen= () => {
     }
     return (
         <View style={styles.container}>
-            <Text style={{fontSize: 35}}>Transcation home</Text>
             <FlatList
                 style={{ width: "100%" }}
                 keyExtractor={(item) => item.id}

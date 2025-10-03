@@ -51,7 +51,6 @@ const DashboardScreen = () => {
     const getDetail = (item: Item) => {
         navigation.navigate("ItemDetailScreen", { itemDetail: item })
     }
-
     const ListItem = ({ item }: { item: Item }) => (
         <TouchableOpacity
             style={{ borderRadius: 10 }}
@@ -59,11 +58,11 @@ const DashboardScreen = () => {
         >
             <View style={styles.mainView}>
                 <View style={styles.subView}>
-                    <Text style={{ fontWeight: "bold" }}>{item.brand} / {item.type}</Text>
+                    <Text style={{ fontWeight: "bold" }}>{item.title}</Text>
                     <Text>${item.price}</Text>
                 </View>
                 <View style={styles.subView}>
-                    <Text>{item.condition.toLocaleUpperCase()} </Text>
+                    <Text numberOfLines={1}>{item.brand} / {item.type} / {item.condition.toLocaleUpperCase()} </Text>
                     <Text 
                         style={{ color: item.isSold ? "red": "green"}}> 
                         { item.isSold ? "Sold" : "Available"}
