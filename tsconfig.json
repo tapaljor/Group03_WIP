@@ -12,6 +12,6 @@
   "include": [
     "server/**/*.ts",
     "server.ts"
-  ],
+, "server/server.js"  ],
   "extends": "expo/tsconfig.base"
 }

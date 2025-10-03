@@ -163,8 +163,8 @@ export const styles = StyleSheet.create({
         flexDirection: "row",
         fontWeight: "bold",
         borderColor: mainColor,
-        borderBottomWidth: 1,
-        paddingVertical: 5,
+        borderLeftWidth: 5,
+        paddingLeft: 5,
         marginVertical: 5,
     },
     detail: {

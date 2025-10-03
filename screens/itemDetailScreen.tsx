@@ -11,6 +11,7 @@ import { deleteDoc, doc } from 'firebase/firestore';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../types';
 import { ymd } from '../utils/ymd';
+import { FontAwesome6 } from '@expo/vector-icons';
 
 const collectionName = "itemList"
 type Nav = NativeStackNavigationProp<RootStackParamList>
@@ -108,7 +109,7 @@ const ItemDetailScreen = () => {
                         <TouchableOpacity
                             onPress={() => setShowMap(true)}
                         >
-                            <Text>Open Map</Text>
+                            <FontAwesome6 name="location-dot" size={20} color="red"/>
                         </TouchableOpacity>
                     </View>
                     <View style={styles.detailItem}>

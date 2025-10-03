@@ -19,6 +19,8 @@ const TransactionHomeScreen = () => {
     const [itemList, setItemList] = useState<Item[]>([])
 
     useEffect(() => {
+        if (!user?.uid) return
+
         const colRef = collection(FirebaseDB, collectionName)
         const q = query(colRef, where("buyerID", "==", user?.uid))
         const unsubscribe = onSnapshot(q, (snap) => {
@@ -30,7 +32,7 @@ const TransactionHomeScreen = () => {
             (err) => console.error("Canot fetch list", err)
         )
         return () => unsubscribe()
-    }, [])
+    }, [user?.uid])
     const getDetail = (item: Item) => {
         navigation.navigate("ItemDetailScreen", { itemDetail: item })
     }

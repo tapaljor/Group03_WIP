@@ -1,4 +1,3 @@
-// PaymentModal.tsx
 import React, { useEffect, useState } from "react";
 import { Modal, View, Text, TouchableOpacity, ActivityIndicator, Alert, Platform, Linking } from "react-native";
 import { WebView } from "react-native-webview";

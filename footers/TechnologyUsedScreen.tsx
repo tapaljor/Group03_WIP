@@ -34,11 +34,17 @@ const TechnologyUsedScreen = () => {
                 >
                     <Text style={styles.paragraph}>Unsplash</Text>
                 </TouchableOpacity>
-                 <Text style={styles.header}>Payment</Text>
+                <Text style={styles.header}>Payment</Text>
                 <TouchableOpacity
                     onPress={() => openLink('https://stripe.com/')}
                 >
                     <Text style={styles.paragraph}>Stripe</Text>
+                </TouchableOpacity>
+                 <Text style={styles.header}>Map</Text>
+                <TouchableOpacity
+                    onPress={() => openLink('https://developers.google.com/maps')}
+                >
+                    <Text style={styles.paragraph}>Google Map</Text>
                 </TouchableOpacity>
             </ScrollView>
         </SafeAreaView >

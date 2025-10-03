@@ -34,8 +34,6 @@ const AddItemScreen = () => {
     const [brand, setBrand] = useState<ElectronicBrand | "">("");
     const [type, setType] = useState<ElectronicType | "">("");
     const [condition, setCondition] = useState<ItemCondition | "">("");
-    const sellerID = user?.uid;
-    const sellerName = user?.displayName;
     const [description, setDescription] = useState<string>("");
     const [address, setAddress] = useState<string>("");
     const [price, setPrice] = useState<string>("");
@@ -93,6 +91,7 @@ const AddItemScreen = () => {
                 address: address.trim(),
                 price: Number(price),
                 postDate: Date.now(),
+                buyerID: "",
                 images: images.map((u) => u.trim()).filter(Boolean),
             };
 

@@ -2,7 +2,6 @@ import { NavigationContainer } from '@react-navigation/native';
 import { userAuthentication } from './config/userAuthentication';
 import HomeTab from './navigations/HomeTab';
 import WelcomeStack from './navigations/WelcomeStack';
-import { StripeProvider } from '@stripe/stripe-react-native';
 
 /*
 npm install @react-navigation/native
@@ -16,13 +15,11 @@ export default function App() {
     const { user } = userAuthentication()
 
     return (
-        <StripeProvider publishableKey='pk_test_51SDo3o2HtvBgi4wsaWtmeJOIfLYGAwVISAwIgcJbrj4bOXAZbLzUhd4DL0wQT8825aAlUXGNsCEwAJ4hIGld7ZyR00c0cMyvOm'>
             <NavigationContainer>
                 {
                     user ? <HomeTab /> : <WelcomeStack />
                 }
             </NavigationContainer>
-        </StripeProvider >
     )
 }
 
