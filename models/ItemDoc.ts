@@ -14,7 +14,7 @@ export interface Item {
     buyerID: string,
     buyerName: string,
     soldDate: number,
-    images: [],
+    images: string[],
 }
 export enum ItemCondition {
     New = "new",

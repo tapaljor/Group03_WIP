@@ -16,4 +16,5 @@ export type RootStackParamList = {
     What: undefined;
     Settings: undefined;
     TransactionHomeScreen: undefined;
+    ChatHomeScreen: undefined;
 }

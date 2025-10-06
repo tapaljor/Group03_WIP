@@ -5,6 +5,7 @@ import HomeStack from "./HomeStack";
 import AddItemStack from "./AddItemStack";
 import TransactionStack from "./TransactionStack";
 import SettingsStack from "./SettingsStack";
+import ChatStack from "./ChatStack";
 import { View, TouchableOpacity } from "react-native";
 
 const Tab = createBottomTabNavigator()
@@ -29,7 +30,7 @@ function AddFabButton({ onPress, accessibilityState }: any) {
                     borderRadius: 30,
                     backgroundColor: focused ? "#facc15" : "#fff", // yellow when active
                     borderWidth: 4,
-                    borderColor: "teal",       
+                    borderColor: "#800080",       
                     alignItems: "center",
                     justifyContent: "center",
                 }}
@@ -48,7 +49,8 @@ const HomeTabs = () => {
                     route.name === "AddItem" ? "plus-square" :
                     route.name === "HomeStack" ? "plug" :
                     route.name === "TransactionStack" ? "money-check-dollar" :
-                    route.name === "Settings" ? "gear" : "plus";
+                    route.name === "Settings" ? "gear" :
+                    route.name === "ChatStack" ? "message" : "face-smile"; 
 
                 return {
                     headerShown: false,
@@ -79,6 +81,13 @@ const HomeTabs = () => {
                 }}
                 name="HomeStack"
                 component={HomeStack}
+            />
+            <Tab.Screen
+                options={{
+                    title: "Chat",
+                }}
+                name="ChatStack"
+                component={ChatStack}
             />
             <Tab.Screen
                 options={{

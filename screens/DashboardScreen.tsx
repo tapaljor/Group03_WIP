@@ -28,7 +28,7 @@ const DashboardScreen = () => {
                     const data = {
                         ...change.doc.data(),
                         id: change.doc.id
-                    }
+                    } as Item
                     if (change.type === "added") {
                         if (!updatedList.some((v) => v.id === data.id)) {
                             updatedList.push(data)

@@ -17,6 +17,7 @@ import { FirebaseDB } from "../config/firebaseConfig";
 import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
 import { RootStackParamList } from "../types";
 import { Item } from "../models/ItemDoc";
+import DisplayImages from "../components/DisplayImages";
 
 type Route = RouteProp<RootStackParamList, "EditItemScreen">;
 const collectionName = "itemList"
@@ -80,33 +81,7 @@ const EditItemScreen = () => {
         <>
             <ScrollView contentContainerStyle={styles.container}>
                 {/* Image carousel */}
-                <ScrollView
-                    horizontal
-                    pagingEnabled
-                    showsHorizontalScrollIndicator={true}
-                    style={{
-                        marginBottom: 10,
-                    }}
-                >
-                    {
-                        Array.isArray(itemDetail?.images) && itemDetail.images.length > 0 && (
-                            itemDetail.images.map((image: string, index: number) => (
-                                <Image
-                                    key={index}
-                                    style={{
-                                        width: Dimensions.get('window').width,
-                                    }}
-                                    source={{
-                                        uri: image !== ''
-                                            ? image
-                                            : 'https://images.unsplash.com/photo-1489824904134-891ab64532f1?q=80&w=2062&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-                                    }}
-                                    resizeMode="cover"
-                                />
-                            )
-                            ))
-                    }
-                </ScrollView>
+                <DisplayImages images={images} />
                 <View style={[styles.detail, { width: "100%" }]}>
                     <Text>Title</Text>
                     <TextInput

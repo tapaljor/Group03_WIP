@@ -2,23 +2,25 @@ import { Modal, Linking, Platform, ScrollView, View, Image, TouchableOpacity, Te
 import { styles } from '../g03CSS';
 import { useEffect, useState } from 'react';
 import { userAuthentication } from '../config/userAuthentication';
-import { useNavigation, useRoute } from '@react-navigation/native';
+import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import MapModal from "../modals/MapModal";
 import PaymentModal from "../modals/PaymentModal";
 import { Item } from '../models/ItemDoc';
 import { FirebaseDB } from '../config/firebaseConfig';
 import { deleteDoc, doc } from 'firebase/firestore';
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { NativeStackNavigationProp, NativeStackScreenProps } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../types';
 import { ymd } from '../utils/ymd';
 import { FontAwesome6 } from '@expo/vector-icons';
+import DisplayImages from "../components/DisplayImages";
 
 const collectionName = "itemList"
+type Route = RouteProp<RootStackParamList, "ItemDetailScreen"> 
 type Nav = NativeStackNavigationProp<RootStackParamList>
 
 const ItemDetailScreen = () => {
 
-    const route = useRoute()
+    const route = useRoute<Route>()
     const { user } = userAuthentication()
     const navigation = useNavigation<Nav>()
     const { itemDetail }: { itemDetail: Item } = route.params
@@ -59,33 +61,7 @@ const ItemDetailScreen = () => {
     return (
         <>
             <ScrollView contentContainerStyle={styles.container} >
-                <ScrollView
-                    horizontal
-                    pagingEnabled
-                    showsHorizontalScrollIndicator={true}
-                    style={{
-                        marginBottom: 10,
-                    }}
-                >
-                    {
-                        Array.isArray(itemDetail?.images) && itemDetail.images.length > 0 && (
-                            itemDetail.images.map((image: string, index: number) => (
-                                <Image
-                                    key={index}
-                                    style={{
-                                        width: Dimensions.get('window').width,
-                                    }}
-                                    source={{
-                                        uri: image !== ''
-                                            ? image
-                                            : 'https://images.unsplash.com/photo-1489824904134-891ab64532f1?q=80&w=2062&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-                                    }}
-                                    resizeMode="cover"
-                                />
-                            )
-                            ))
-                    }
-                </ScrollView>
+                <DisplayImages images={itemDetail.images} />
                 <View style={styles.detail}>
                     <View style={styles.detailItem}>
                         <Text style={{ fontWeight: "bold" }}>Title</Text>
@@ -109,7 +85,7 @@ const ItemDetailScreen = () => {
                         <TouchableOpacity
                             onPress={() => setShowMap(true)}
                         >
-                            <FontAwesome6 name="location-dot" size={20} color="red"/>
+                            <FontAwesome6 name="location-dot" size={20} color="red" />
                         </TouchableOpacity>
                     </View>
                     <View style={styles.detailItem}>
@@ -162,8 +138,8 @@ const ItemDetailScreen = () => {
                     )
                 }
                 {
-                    itemDetail.sellerID !== user?.uid && 
-                    ! itemDetail.isSold && (
+                    itemDetail.sellerID !== user?.uid &&
+                    !itemDetail.isSold && (
                         <>
                             <TouchableOpacity
                                 onPress={() => setBuyVisible(true)}
