@@ -19,8 +19,8 @@ const DashboardScreen = () => {
     const navigation = useNavigation<Nav>()
     const { user } = userAuthentication();
     const [itemList, setItemList] = useState<Item[]>([])
-    const [brand, setBrand] = useState<ElectronicBrand | "">("All")
-    const [type, setType] = useState<ElectronicType | "">("All")
+    const [brand, setBrand] = useState<ElectronicBrand | "">(ElectronicBrand.All)
+    const [type, setType] = useState<ElectronicType | "">(ElectronicType.All)
 
     const brandOptions = useMemo(
         () => Object.values(ElectronicBrand).map((b) => ({ label: b, value: b })),
