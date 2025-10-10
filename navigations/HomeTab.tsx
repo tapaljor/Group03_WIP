@@ -47,7 +47,7 @@ const HomeTabs = () => {
             screenOptions={({ route }) => {
                 const iconName =
                     route.name === "AddItem" ? "plus-square" :
-                    route.name === "HomeStack" ? "plug" :
+                    route.name === "HomeStack" ? "house" :
                     route.name === "TransactionStack" ? "money-check-dollar" :
                     route.name === "Settings" ? "gear" :
                     route.name === "ChatStack" ? "message" : "face-smile"; 

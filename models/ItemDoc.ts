@@ -25,6 +25,7 @@ export enum ItemCondition {
     ForParts = "for-parts",
 }
 export enum ElectronicType {
+    All = "All",
     Smartphone = "Smartphone",
     Tablet = "Tablet",
     Laptop = "Laptop",
@@ -44,6 +45,7 @@ export enum ElectronicType {
 }
 export enum ElectronicBrand {
     // Smartphones & Tablets
+    All = "All",
     Apple = "Apple",
     Samsung = "Samsung",
     Google = "Google",

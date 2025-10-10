@@ -35,10 +35,9 @@ export const styles = StyleSheet.create({
         fontWeight: "500",
     },
     inputStyle: {
-        fontSize: 20,
         borderColor: 'black',
         borderWidth: 1,
-        borderRadius: 15,
+        borderRadius: 7,
         color: "black",
         padding: 10,
         marginVertical: 5,

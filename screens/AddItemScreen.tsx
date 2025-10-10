@@ -92,6 +92,7 @@ const AddItemScreen = () => {
                 price: Number(price),
                 postDate: Date.now(),
                 buyerID: "",
+                isSold: false,
                 images: images.map((u) => u.trim()).filter(Boolean),
             };
 
