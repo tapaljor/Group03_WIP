@@ -132,9 +132,7 @@ export const styles = StyleSheet.create({
         borderRadius: 25,
     },
     logo: {
-        width: 150,
-        height: 150,
-        marginVertical: 20,
+        width: "100%",
     },
     footer: {
         width: "100%",

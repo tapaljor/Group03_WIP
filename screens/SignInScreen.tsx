@@ -65,6 +65,7 @@ const SignInScreen = () => {
                 <Image
                     source={require("../assets/logoMain.png")}
                     style={styles.logo}
+                    resizeMode="contain"
                 />
             </View>
             <View style={styles.welcome}>

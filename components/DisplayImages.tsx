@@ -1,5 +1,5 @@
-import React, { useRef } from "react";
-import { View, Image, Animated, useWindowDimensions } from "react-native";
+import React, { useRef, useState } from "react";
+import { View, Image, Animated, useWindowDimensions, TouchableOpacity, Modal } from "react-native";
 
 type Props = { images: string[] };
 
@@ -14,6 +14,9 @@ export default function DisplayImages({ images = [] }: Props) {
     const TRACK_W = Math.min(width * 0.4, 120);
     const trackBg = "rgba(0,0,0,0.35)";
     const dotBg = "#fff";
+
+    const [clickImageVisible, setClickImageVisible] = useState(false)
+    const [clickedImage, setClickedImage] = useState("https://placehold.co/600x400/EEE/31343C")
 
     // move dot from left→right as you scroll pages
     const translateX = scrollX.interpolate({
@@ -31,7 +34,14 @@ export default function DisplayImages({ images = [] }: Props) {
                 data={data}
                 keyExtractor={(u, i) => `${i}-${u}`}
                 renderItem={({ item }) => (
+                    <TouchableOpacity
+                    onPress={() => {
+                        setClickImageVisible(true)
+                        setClickedImage(item)
+                    }}
+                    >
                     <Image style={{ width, height: H }} source={{ uri: item }} resizeMode="cover" />
+                    </TouchableOpacity>
                 )}
                 onScroll={Animated.event(
                     [{ nativeEvent: { contentOffset: { x: scrollX } } }],
@@ -64,6 +74,15 @@ export default function DisplayImages({ images = [] }: Props) {
                     </View>
                 </View>
             )}
+            <Modal
+            style={{width: "100%", height: "100%", backgroundColor: "yellow"}}
+            animationType="slide"
+            transparent={true}
+            visible={clickImageVisible}
+            onRequestClose={() => setClickImageVisible(false)}
+            >
+                <Image source={{uri: clickedImage}} style={{width: 100}}/>
+            </Modal>
         </View>
     )
 }
