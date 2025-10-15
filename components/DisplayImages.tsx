@@ -1,5 +1,6 @@
 import React, { useRef, useState } from "react";
-import { View, Image, Animated, useWindowDimensions, TouchableOpacity, Modal } from "react-native";
+import { View, Image, Animated, useWindowDimensions, TouchableOpacity, Modal, Pressable } from "react-native";
+import ClickedImageModal from "../modals/ClickedImageModal";
 
 type Props = { images: string[] };
 
@@ -24,7 +25,6 @@ export default function DisplayImages({ images = [] }: Props) {
         outputRange: [0, TRACK_W - DOT],
         extrapolate: "clamp",
     });
-
     return (
         <View style={{ height: H, overflow: "hidden", marginBottom: 10 }}>
             <Animated.FlatList
@@ -35,12 +35,12 @@ export default function DisplayImages({ images = [] }: Props) {
                 keyExtractor={(u, i) => `${i}-${u}`}
                 renderItem={({ item }) => (
                     <TouchableOpacity
-                    onPress={() => {
-                        setClickImageVisible(true)
-                        setClickedImage(item)
-                    }}
+                        onPress={() => {
+                            setClickImageVisible(true)
+                            setClickedImage(item)
+                        }}
                     >
-                    <Image style={{ width, height: H }} source={{ uri: item }} resizeMode="cover" />
+                        <Image style={{ width, height: H }} source={{ uri: item }} resizeMode="cover" />
                     </TouchableOpacity>
                 )}
                 onScroll={Animated.event(
@@ -74,15 +74,11 @@ export default function DisplayImages({ images = [] }: Props) {
                     </View>
                 </View>
             )}
-            <Modal
-            style={{width: "100%", height: "100%", backgroundColor: "yellow"}}
-            animationType="slide"
-            transparent={true}
-            visible={clickImageVisible}
-            onRequestClose={() => setClickImageVisible(false)}
-            >
-                <Image source={{uri: clickedImage}} style={{width: 100}}/>
-            </Modal>
+            <ClickedImageModal
+                image={clickedImage} 
+                visible={clickImageVisible}
+                onClose={() => setClickImageVisible(false)}
+            />
         </View>
     )
 }
