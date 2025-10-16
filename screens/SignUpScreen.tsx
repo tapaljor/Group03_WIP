@@ -39,13 +39,13 @@ const SignUpScreen = () => {
         if (password !== confirmPassword) {
             setError("Password mistached.")
             return
-        } 
+        }
         try {
             const { user } = await createUserWithEmailAndPassword(FirebaseAuth, email, password)
             // after user created update profile provided by firebaseAuth
-            await updateProfile(user, { 
-                displayName: displayName.trim(), 
-                photoURL: photoUrl ?? defaultImage 
+            await updateProfile(user, {
+                displayName: displayName.trim(),
+                photoURL: photoUrl ?? defaultImage
             })
             await user.reload()
             await user.getIdToken(true)
@@ -58,7 +58,7 @@ const SignUpScreen = () => {
         } catch (err: any) {
             console.log("Error: ${err}")
             setError(`Error: ${err}`)
-        } 
+        }
     }
     useLayoutEffect(() => {
         navigation.setOptions({ title: "Registration" })
@@ -69,6 +69,7 @@ const SignUpScreen = () => {
                 <Image
                     source={require("../assets/logoMain.png")}
                     style={styles.logo}
+                    resizeMode="contain"
                 />
             </View>
             <View style={styles.welcome}>
