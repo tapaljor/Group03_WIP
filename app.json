@@ -12,12 +12,6 @@
             "resizeMode": "contain",
             "backgroundColor": "#ffffff"
         },
-        "ios": {
-            "bundleIdentifier": "com.tashipaljor.group03"
-        },
-        "android": {
-            "package": "com.tashipaljor.group03"
-        },
         "web": {
             "favicon": "./assets/favicon.png"
         },

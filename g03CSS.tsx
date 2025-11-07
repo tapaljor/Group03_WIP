@@ -175,4 +175,14 @@ export const styles = StyleSheet.create({
         flexDirection: "column",
         marginBottom: 10,
     },
+    stickyKB: {
+        position: "absolute",
+        left: 0, right: 0, bottom: 0,
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "center",
+        backgroundColor: "white", // or your theme
+        borderTopWidth: 1, borderTopColor: "#ddd",
+        paddingHorizontal: 15,
+    }
 })
