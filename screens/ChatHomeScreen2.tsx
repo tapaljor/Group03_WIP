@@ -1,7 +1,14 @@
-import React, { useState } from 'react'
-import { Platform, View, TextInput, TouchableOpacity, Text, ActivityIndicator, Button, ScrollView, KeyboardAvoidingView, FlatList } from 'react-native'
-import { styles } from '../g03CSS'
-import { SafeAreaView } from 'react-native-safe-area-context';
+import React, { useRef, useState } from 'react';
+import {
+    Platform,
+    View,
+    TextInput,
+    TouchableOpacity,
+    Text,
+    KeyboardAvoidingView,
+    FlatList
+} from 'react-native';
+import { styles } from '../g03CSS';
 import context from "../utils/aiReference.ts";
 
 const BASE = Platform.OS === "android"
@@ -10,31 +17,40 @@ const BASE = Platform.OS === "android"
 
 const MODEL = "phi3:mini";
 
-
 export default function ChatHomeScreen2() {
-    const [chat, setChat] = useState([{ role: "assistant", content: "Hi, How can I help you?" }])
-    const [input, setInput] = useState("")
+    const [chat, setChat] = useState([
+        { role: "assistant", content: "Hi, How can I help you?" }
+    ]);
+    const [input, setInput] = useState("");
 
+    const flatListRef = useRef<FlatList>(null);
+
+    const scrollToBottom = () => {
+        flatListRef.current?.scrollToEnd({ animated: true });
+    };
 
     const ask = async () => {
-        if (!input.trim()) return
-        const user = { role: "user", content: input }
-        setChat([...chat, user])
-        setInput("")
+        if (!input.trim()) return;
+
+        const user = { role: "user", content: input.trim() };
+
+        // use functional update so we don’t depend on stale chat
+        setChat(prev => [...prev, user]);
+        setInput("");
 
         const prompt =
             `You are a customer care agent. Use ONLY the information inside <CONTEXT>...</CONTEXT>.
-                If the answer is not fully supported by the context, 
-                reply exactly: "Not in context".
+        If the answer is not fully supported by the context, 
+        reply exactly: "Not in context".
 
-        <CONTEXT>
-            ${context}
-        </CONTEXT>
+<CONTEXT>
+${context}
+</CONTEXT>
 
-        Conversation so far:
-            ${[...chat, user].map(m => `${m.role}: ${m.content}`).join("\n")}
+Conversation so far:
+${[...chat, user].map(m => `${m.role}: ${m.content}`).join("\n")}
 
-        Answer:`;
+Answer:`;
 
         try {
             const res = await fetch(`${BASE}/api/generate`, {
@@ -45,35 +61,45 @@ export default function ChatHomeScreen2() {
                     stream: false,
                     prompt
                 }),
-            })
-            if (!res.ok) throw new Error(`HTTP ${res.status}`)
-            const data = await res.json()
-            const content = data?.response ?? "(no reply)"
-            setChat(prev => [...prev, { role: "assistant", content }])
+            });
+
+            if (!res.ok) throw new Error(`HTTP ${res.status}`);
+            const data = await res.json();
+            const content = data?.response ?? "(no reply)";
+
+            setChat(prev => [...prev, { role: "assistant", content }]);
         } catch (e: any) {
-            setChat(prev => [...prev, { role: "assitant", content: `Error: ${e.message || e}` }])
+            setChat(prev => [
+                ...prev,
+                { role: "assistant", content: `Error: ${e.message || e}` }
+            ]);
         }
-    }
+    };
+
     const ListItem = ({ item }) => (
-        <View style={styles.mainView}>
-            <Text>{item.role}: {item.content}</Text>
+        <View style={[styles.mainView, { marginBottom: 10 }]}>
+            <Text>{item.role.toUpperCase()}: {item.content}</Text>
         </View>
-    )
+    );
+
     return (
-        <SafeAreaView style={{ flex: 1 }}>
+        <View style={styles.container}>
             <KeyboardAvoidingView
                 style={{ flex: 1 }}
                 behavior={Platform.OS === "ios" ? "padding" : "height"}
                 keyboardVerticalOffset={Platform.OS === "ios" ? 100 : 60}
             >
                 <FlatList
-                    style={{ flex: 1, }}
+                    ref={flatListRef}
+                    style={styles.flatList}
                     data={chat}
                     keyExtractor={(_, i) => String(i)}
                     renderItem={({ item }) => <ListItem item={item} />}
-                    contentContainerStyle={{ padding: 12, paddingBottom: 80 }}
                     keyboardShouldPersistTaps="handled"
+                    onContentSizeChange={scrollToBottom}
+                    onLayout={scrollToBottom}
                 />
+
                 <View style={styles.stickyKB}>
                     <TextInput
                         style={styles.inputStyle}
@@ -89,7 +115,6 @@ export default function ChatHomeScreen2() {
                     </TouchableOpacity>
                 </View>
             </KeyboardAvoidingView>
-        </SafeAreaView>
-    )
+        </View>
+    );
 }
-

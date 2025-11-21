@@ -15,6 +15,7 @@ export type RootStackParamList = {
     TechnologyUsed: undefined;   
     What: undefined;
     Settings: undefined;
+    ReturnScreen: undefined;
     TransactionHomeScreen: undefined;
     ChatHomeScreen: undefined;
     ChatHomeScreen2: undefined;

@@ -6,6 +6,7 @@ import FaqScreen from "../footers/FaqScreen";
 import ProfileScreen from "../footers/ProfileScreen";
 import WhatScreen from "../footers/WhatScreen";
 import TechnologyUsedScreen from "../footers/TechnologyUsedScreen";
+import ReturnScreen from "../screens/ReturnScreen";
 
 const Stack = createNativeStackNavigator<RootStackParamList>()
 
@@ -37,6 +38,10 @@ const SettingsStack = () => {
                 options={{ title: "Technology Used" }}
                 name="TechnologyUsed"
                 component={TechnologyUsedScreen} />
+             <Stack.Screen
+                options={{ title: "Return" }}
+                name="ReturnScreen"
+                component={ReturnScreen} />
         </Stack.Navigator >
     )
 }

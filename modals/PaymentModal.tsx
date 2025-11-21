@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Modal, View, Text, TouchableOpacity, ActivityIndicator, Alert, Platform, Linking } from "react-native";
+import { Modal, View, Text, TouchableOpacity, ActivityIndicator, Alert, Platform, Linking, TextInput } from "react-native";
 import { WebView } from "react-native-webview";
 import { Item } from "../models/ItemDoc";
 import { styles } from "../g03CSS";
@@ -27,6 +27,9 @@ export default function PaymentModal({ itemDetail, visible, onClose }: Props) {
     const { user } = userAuthentication()
     const [checkoutUrl, setCheckoutUrl] = useState<string | null>(null);
     const [loading, setLoading] = useState(false);
+    const [sessionId, setSessionId] = useState(itemDetail.checkoutSessionId ?? null);
+    const [deliveryAddress, setDeliveryAddress] = useState("")
+    const [deliveryPhone, setDeliveryPhone] = useState("")
 
     // Create a Checkout Session when modal opens
     useEffect(() => {
@@ -53,10 +56,11 @@ export default function PaymentModal({ itemDetail, visible, onClose }: Props) {
                     const text = await res.text().catch(() => "");
                     throw new Error(`HTTP ${res.status} — ${text || "No body"}`);
                 }
-                const { url, error } = await res.json();
+                const { url, error, sessionId: sid } = await res.json();
                 if (error) throw new Error(error);
                 if (!url) throw new Error("Server did not return a checkout URL.");
                 setCheckoutUrl(url);
+                setSessionId(sid || null);
             } catch (e: any) {
                 Alert.alert("Payment error", e?.message ?? "Failed");
             } finally {
@@ -73,7 +77,11 @@ export default function PaymentModal({ itemDetail, visible, onClose }: Props) {
                 isSold: true,
                 buyerID: user?.uid,
                 buyerName: user?.displayName,
-                soldDate: Date.now()
+                soldDate: Date.now(),
+                deliveryAddress,
+                deliveryPhone,
+                deliveryStatus: "Getting ready",
+                checkoutSessionId: sessionId || null,
             }, { merge: true }
         )
     }
@@ -92,8 +100,6 @@ export default function PaymentModal({ itemDetail, visible, onClose }: Props) {
             setCheckoutUrl(null);
             onClose();
         }
-        // If you use a custom scheme like "yourapp://", intercept and open externally:
-        // if (url.startsWith("yourapp://")) { Linking.openURL(url); onClose(); }
     };
 
     return (
@@ -105,7 +111,20 @@ export default function PaymentModal({ itemDetail, visible, onClose }: Props) {
                         <Text style={{ color: "red" }}>Close</Text>
                     </TouchableOpacity>
                 </View>
-
+                <View>
+                    <TextInput
+                        style={styles.inputStyle}
+                        value={deliveryAddress}
+                        onChangeText={setDeliveryAddress}
+                        placeholder="Delivery address.."
+                    />
+                    <TextInput
+                        style={styles.inputStyle}
+                        value={deliveryPhone}
+                        onChangeText={setDeliveryPhone}
+                        placeholder="Delivery phone.."
+                    />
+                </View>
                 {loading && (
                     <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
                         <ActivityIndicator />

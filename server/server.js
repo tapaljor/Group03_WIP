@@ -109,7 +109,43 @@ app.post("/checkout", async (req, res) => {
             success_url: "https://example.com/success",
             cancel_url: "https://example.com/cancel",
         })
-        res.json({ url: session.url })
+        res.json({ url: session.url, sessionId: session.id })
+    } catch (e) {
+        console.error(e)
+        res.status(500).json({ error: e.message })
+    }
+})
+app.post("/refund", async (req, res) => {
+    try {
+        const { sessionId } = req.body || {}
+
+        if (!sessionId) {
+            return res.status(400).json({ error: "sessionId is required" })
+        }
+
+        // 1. Get Checkout Session, including payment_intent
+        const session = await stripe.checkout.sessions.retrieve(sessionId, {
+            expand: ["payment_intent"],
+        })
+
+        const paymentIntent = session.payment_intent
+        const paymentIntentId =
+            typeof paymentIntent === "string" ? paymentIntent : paymentIntent?.id
+
+        if (!paymentIntentId) {
+            return res.status(400).json({ error: "No payment_intent found for this session" })
+        }
+
+        // 2. Create refund
+        const refund = await stripe.refunds.create({
+            payment_intent: paymentIntentId,
+        })
+
+        res.json({
+            ok: true,
+            refundId: refund.id,
+            status: refund.status,
+        })
     } catch (e) {
         console.error(e)
         res.status(500).json({ error: e.message })

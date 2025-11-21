@@ -183,6 +183,11 @@ export const styles = StyleSheet.create({
         justifyContent: "center",
         backgroundColor: "white", // or your theme
         borderTopWidth: 1, borderTopColor: "#ddd",
-        paddingHorizontal: 15,
-    }
+    },
+    flatList: {
+        flex: 1,
+        paddingHorizontal: 12,
+        paddingTop: 12,
+        marginBottom: 150,
+    },
 })

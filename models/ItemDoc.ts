@@ -13,8 +13,12 @@ export interface Item {
     isSold: boolean,
     buyerID: string,
     buyerName: string,
+    deliveryAddress: string,
+    deliveryPhone: string,
+    deliveryStatus: string,
     soldDate: number,
     images: string[],
+    checkoutSessionId?: string | null,
 }
 export enum ItemCondition {
     New = "new",

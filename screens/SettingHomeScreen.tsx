@@ -34,6 +34,13 @@ const SettingHomeScreen = () => {
                     <FontAwesome6 name="hire-a-helper" size={16} color="#4c787e" />
                     <Text>FAQ</Text>
                 </TouchableOpacity>
+                 <TouchableOpacity
+                    style={styles.footerItem}
+                    onPress={() => navigation.navigate("ReturnScreen")}
+                >
+                    <FontAwesome6 name="rotate-left" size={16} color="#4c787e" />
+                    <Text>Return</Text>
+                </TouchableOpacity>
                 <TouchableOpacity
                     style={styles.footerItem}
                     onPress={() => signOut(FirebaseAuth)}

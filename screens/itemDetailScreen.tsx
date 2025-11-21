@@ -13,9 +13,10 @@ import { RootStackParamList } from '../types';
 import { ymd } from '../utils/ymd';
 import { FontAwesome6 } from '@expo/vector-icons';
 import DisplayImages from "../components/DisplayImages";
+import ReturnModal from '../modals/ReturnModal';
 
 const collectionName = "itemList"
-type Route = RouteProp<RootStackParamList, "ItemDetailScreen"> 
+type Route = RouteProp<RootStackParamList, "ItemDetailScreen">
 type Nav = NativeStackNavigationProp<RootStackParamList>
 
 const ItemDetailScreen = () => {
@@ -27,6 +28,7 @@ const ItemDetailScreen = () => {
     const [address, setAddress] = useState("")
     const [showMap, setShowMap] = useState(false);
     const [buyVisible, setBuyVisible] = useState(false);
+    const [returnVisible, setReturnVisible] = useState(false);
 
     useEffect(() => {
         setAddress(itemDetail.address)
@@ -150,10 +152,40 @@ const ItemDetailScreen = () => {
                         </>
                     )
                 }
+                {
+                    itemDetail.isSold &&
+                    itemDetail.buyerID === user?.uid && (
+                        <>
+                            <View style={styles.detailItem}>
+                                <Text style={{ fontWeight: "bold" }}>Delivery Address</Text>
+                                <Text>{itemDetail?.deliveryAddress ?? ""}</Text>
+                            </View>
+                            <View style={styles.detailItem}>
+                                <Text style={{ fontWeight: "bold" }}>Delivery Phone</Text>
+                                <Text>{itemDetail?.deliveryPhone ?? ""}</Text>
+                            </View>
+                            <View style={styles.detailItem}>
+                                <Text style={{ fontWeight: "bold" }}>Delivery Status</Text>
+                                <Text>{itemDetail?.deliveryStatus ?? "Pending"}</Text>
+                            </View>
+                            <TouchableOpacity
+                                onPress={() => setReturnVisible(true)}
+                                style={styles.buttonStyle}
+                            >
+                                <Text>Return</Text>
+                            </TouchableOpacity>
+                        </>
+                    )
+                }
             </ScrollView >
             <PaymentModal
                 visible={buyVisible}
                 onClose={() => setBuyVisible(false)}
+                itemDetail={itemDetail}
+            />
+            <ReturnModal
+                visible={returnVisible}
+                onClose={() => setReturnVisible(false)}
                 itemDetail={itemDetail}
             />
             <MapModal

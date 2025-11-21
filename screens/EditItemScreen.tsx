@@ -32,6 +32,7 @@ const EditItemScreen = () => {
     const [description, setDescription] = useState<string>("");
     const [price, setPrice] = useState("")
     const [address, setAddress] = useState("")
+    const [deliveryStatus, setDeliveryStatus] = useState("")
     const [images, setImages] = useState<string[]>([]);
 
     // Modal (add image)
@@ -43,6 +44,7 @@ const EditItemScreen = () => {
         setDescription(itemDetail.description);
         setPrice(itemDetail.price.toString());
         setAddress(itemDetail.address)
+        setDeliveryStatus(itemDetail?.deliveryStatus)
         setImages(Array.isArray(itemDetail.images) ? itemDetail.images : []);
     }, [itemDetail]);
 
@@ -64,6 +66,7 @@ const EditItemScreen = () => {
                 description: description.trim(),
                 price: Number(price),
                 address: address.trim(),
+                deliveryStatus: deliveryStatus.trim(),
                 images: Array.isArray(images) ? images : [],
             };
             const ref = doc(FirebaseDB, collectionName, itemDetail.id);
@@ -110,6 +113,11 @@ const EditItemScreen = () => {
                         onChangeText={setDescription}
                         placeholder="Description.."
                         multiline
+                    />
+                     <TextInput
+                        style={styles.inputStyle}
+                        value={deliveryStatus}
+                        onChangeText={setDeliveryStatus}
                     />
                     <Text>Images</Text>
                     {/* Image URL editors */}
